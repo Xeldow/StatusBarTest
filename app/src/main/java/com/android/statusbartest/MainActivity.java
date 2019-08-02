@@ -1,19 +1,27 @@
 package com.android.statusbartest;
 
+import android.app.Activity;
+import android.app.ActivityManagerNative;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * inflate 方法
@@ -37,20 +45,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, StatusBarService.class);
+                stopService(intent);
+//                unbindService(mServiceConnection);
                 startService(intent);
-                bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-                finish();
+//                bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+//                finish();
 
             }
         });
 
-//        Button button2 = (Button) findViewById(R.id.btn2);
-//        button2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(MainActivity.this,"有效",Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        Button button2 = (Button) findViewById(R.id.btn2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "onPause", Toast.LENGTH_SHORT).show();
+                Context context = null;
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(this)) {
@@ -62,7 +73,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("Main", "onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e("Main", "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("Main", "onDestroy");
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {

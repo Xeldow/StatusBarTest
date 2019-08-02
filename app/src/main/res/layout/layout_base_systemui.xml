@@ -4,8 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/status_bar" />
+    <LinearLayout
+        android:id="@+id/panel_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:orientation="vertical">
 
-    <include layout="@layout/status_bar_expanded"/>
+        <include
+            layout="@layout/status_bar"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/status_bar_expanded"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
 
 </merge>

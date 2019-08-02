@@ -15,9 +15,14 @@ import android.view.WindowManager;
 public class StatusBarService extends Service {
     private static WindowManager windowManager;
     private static WindowManager.LayoutParams params;
-    private static StatusBarView barView;
 
     private StatusBarView view;
+
+    @Override
+    public void onDestroy() {
+        windowManager.removeView(view);
+        super.onDestroy();
+    }
 
     public StatusBarService() {
 
@@ -26,7 +31,9 @@ public class StatusBarService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-
+        //mj20,ql40,fx60
+        //weak,2,5,6,7
+        //code,gradle,1,2,3,4,5,6,7
         params = new WindowManager.LayoutParams();
         params.x = 0;
         params.y = 0;
@@ -35,11 +42,12 @@ public class StatusBarService extends Service {
 //        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
 //        params.height = WindowManager.LayoutParams.MATCH_PARENT;
         params.height = 40;
-        params.format=PixelFormat.RGBA_8888;
+        params.format = PixelFormat.RGBA_8888;
         params.type = WindowManager.LayoutParams.TYPE_PHONE;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
         view = new StatusBarView(getApplicationContext(), windowManager, params);
+        windowManager.addView(StatusBarService.this.view, params);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -61,7 +69,6 @@ public class StatusBarService extends Service {
 //        }
 
         public void addView() {
-            windowManager.addView(StatusBarService.this.view, params);
         }
     }
 }
