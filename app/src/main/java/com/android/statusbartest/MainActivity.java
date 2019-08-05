@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, StatusBarService.class);
                 stopService(intent);
-//                unbindService(mServiceConnection);
                 startService(intent);
+//                unbindService(mServiceConnection);
 //                bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
 //                finish();
 

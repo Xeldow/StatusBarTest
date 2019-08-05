@@ -31,17 +31,15 @@ public class StatusBarService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        //mj20,ql40,fx60
-        //weak,2,5,6,7
-        //code,gradle,1,2,3,4,5,6,7
+
         params = new WindowManager.LayoutParams();
         params.x = 0;
         params.y = 0;
         params.gravity = Gravity.TOP;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
 //        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-//        params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = 40;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//        params.height = 40;
         params.format = PixelFormat.RGBA_8888;
         params.type = WindowManager.LayoutParams.TYPE_PHONE;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
