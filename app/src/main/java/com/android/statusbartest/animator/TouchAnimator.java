@@ -29,8 +29,7 @@ public class TouchAnimator {
     private final float mStartDelay;
     private final float mEndDelay;
     /**
-     * 这是干啥的
-     * 间隔吗？
+     * 间隔
      */
     private final float mSpan;
     /**
@@ -38,18 +37,8 @@ public class TouchAnimator {
      */
     private final Interpolator mInterpolator;
     private final Listener mListener;
-    /**
-     * 这是？
-     */
     private float mLastT = -1;
 
-    Handler mHandler = new Handler();
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-        }
-    };
 
     private TouchAnimator(Object[] targets, KeyframeSet[] keyframeSets,
                           float startDelay, float endDelay, Interpolator interpolator, Listener listener) {
@@ -63,21 +52,12 @@ public class TouchAnimator {
         mListener = listener;
     }
 
-    public void setAnimatPosition(final float start, final float end) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                setPosition(start / end);
-                setAnimatPosition(start + 1, end);
-            }
-        });
-    }
 
     public void setPosition(float fraction) {
         //t的范围是0到1
         float t = MathUtils.constrain((fraction - mStartDelay) / mSpan, 0, 1);
         Log.e(TAG, "setPosition: " + t);
-        if (mInterpolator != null) {
+        if (mInterpolator != null) { //可以用插值器控制t
             t = mInterpolator.getInterpolation(t);
             Log.e(TAG, "getInterpolation: " + t);
         }
@@ -111,8 +91,16 @@ public class TouchAnimator {
         private Interpolator mInterpolator;
         private Listener mListener;
 
+        /**
+         * 设置View的动画
+         *
+         * @param target   目标View
+         * @param property 需要的动画效果
+         * @param values   动画的起点和终点,注意起点是以View的右下角为0点
+         */
         @SuppressLint("NewApi")
         public Builder addFloat(Object target, String property, float... values) {
+            //ofFloat会创建一个KeyframeSet对象
             add(target, TouchAnimator.KeyframeSet.ofFloat(getProperty(target, property, float.class), values));
             return this;
         }
@@ -172,6 +160,9 @@ public class TouchAnimator {
             return this;
         }
 
+        /**
+         * @return 一个设置好的Animator对象
+         */
         public TouchAnimator build() {
             return new TouchAnimator(mTargets.toArray(new Object[mTargets.size()]),
                     mValues.toArray(new TouchAnimator.KeyframeSet[mValues.size()]),
@@ -180,7 +171,7 @@ public class TouchAnimator {
     }
 
     /**
-     * KeyframeSet
+     * KeyframeSet 关键帧集合
      */
     private static abstract class KeyframeSet {
 
@@ -195,8 +186,8 @@ public class TouchAnimator {
         void setValue(float fraction, Object target) {
             int i;
             for (i = 1; i < mSize - 1 && fraction > mFrameWidth; i++) ;
-                float amount = fraction / mFrameWidth;
-                interpolate(i, amount, target);
+            float amount = fraction / mFrameWidth;
+            interpolate(i, amount, target);
         }
 
         protected abstract void interpolate(int index, float amount, Object target);
@@ -224,11 +215,14 @@ public class TouchAnimator {
 
         @Override
         protected void interpolate(int index, float amount, Object target) {
+            //这个mValues一开始就存了设置好的位移并分成了很多个帧
             float firstFloat = mValues[index - 1];
             float secondFloat = mValues[index];
+            //amount就是这个控件的宽度或高度,最终还是要乘回来的
             mProperty.set((T) target, firstFloat + (secondFloat - firstFloat) * amount);
         }
     }
+
     @SuppressLint("NewApi")
     private static final FloatProperty<TouchAnimator> POSITION =
             new FloatProperty<TouchAnimator>("position") {

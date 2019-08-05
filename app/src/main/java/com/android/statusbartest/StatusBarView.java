@@ -17,12 +17,13 @@ import android.widget.LinearLayout;
 import com.android.statusbartest.animator.TouchAnimator;
 
 /**
- * @description:
- * @author: Xeldow
- * @date: 2019/7/25
+ * 所有SystemUI的BaseView
+ * <p/>
+ * Created by XiaoZhenLin on 2019/7/25.
  */
 public class StatusBarView extends FrameLayout {
     private static final String TAG = "StatusBarView";
+    private static final int MINEXPENDHIGH = 250;
 
     private Context mContext;
 
@@ -36,8 +37,7 @@ public class StatusBarView extends FrameLayout {
      * 状态栏
      */
     private LinearLayout statusBar;
-    private boolean isStatusBarExpended;
-    private float statusBarHeight;
+    private boolean isStatusBarShown;
     /**
      * 展开部分
      */
@@ -46,13 +46,23 @@ public class StatusBarView extends FrameLayout {
      * 整个下拉栏
      */
     private LinearLayout panelView;
-    private boolean isStartPanelView = false;
-
+    /**
+     * flag
+     */
+    private boolean enablePullDownPanelView = false;
+    private boolean isTouching = false;
+    private boolean isStatusBarExpandedShown = false;
+    /**
+     * Animator
+     * 可以一举实现多个View多个动画效果
+     */
     private TouchAnimator statusBarAnimator;
+    private TouchAnimator.Listener sbAnimatorListener;
 
 
     public StatusBarView(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
+
         // TODO：设置背景方法
 //        setBackgroundColor(Color.parseColor("#858585"));
         mContext = context;
@@ -68,34 +78,39 @@ public class StatusBarView extends FrameLayout {
 //        layoutParams.setMargins(0, statusBar.getHeight(), 0, 0);
     }
 
+    /**
+     * 这个方法不能在View初始化的时候调用
+     * 因为这时候子View还没测量好,无法获取状态栏的高度
+     */
     private void initAnimator() {
         TouchAnimator.Builder statusBarBuilder = new TouchAnimator.Builder();
         statusBarBuilder.addFloat(statusBar, "translationY", -statusBar.getHeight(), 0);
-//        statusBarBuilder.addFloat(statusBar, "alpha", 0, 1);
+//        statusBarBuilder.addFloat(statusBar, "alpha", 0.5, 1);
         statusBarAnimator = statusBarBuilder
-                .setListener(new TouchAnimator.Listener() {
-                    @Override
-                    public void onAnimationAtStart() {
-                        Log.e("TouchAnimator: ", "onAnimationAtStart: ");
-                    }
-
-                    @Override
-                    public void onAnimationAtEnd() {
-                        isStatusBarExpended = true;
-                        Log.e("TouchAnimator: ", "onAnimationAtEnd: ");
-                    }
-
-                    @Override
-                    public void onAnimationStarted() {
-                        Log.e("TouchAnimator: ", "onAnimationStarted: ");
-                    }
-                })
+                .setListener(sbAnimatorListener)
                 .build();
     }
 
     private void initListener() {
         mGestureDetector = new GestureDetector(mContext, new MyGestureListener());
         mGestureDetector.setOnDoubleTapListener(new MyGestureListener());
+        sbAnimatorListener = new TouchAnimator.Listener() {
+            @Override
+            public void onAnimationAtStart() {
+                Log.e("TouchAnimator: ", "onAnimationAtStart: ");
+            }
+
+            @Override
+            public void onAnimationAtEnd() {
+                isStatusBarShown = true;
+                Log.e("TouchAnimator: ", "onAnimationAtEnd: ");
+            }
+
+            @Override
+            public void onAnimationStarted() {
+                Log.e("TouchAnimator: ", "onAnimationStarted: ");
+            }
+        };
     }
 
     private void initView() {
@@ -115,49 +130,57 @@ public class StatusBarView extends FrameLayout {
             将按下和拖动交给Gesture处理
              */
             case MotionEvent.ACTION_DOWN:
-                if (statusBar.getVisibility() != VISIBLE) {
+                isTouching = true;
+                //初始化Animator
+                if (statusBarAnimator == null) {
                     statusBar.setY(0 - statusBar.getHeight());
-                    statusBarHeight = statusBar.getHeight();
                     initAnimator();
                 }
             case MotionEvent.ACTION_MOVE:
                 return mGestureDetector.onTouchEvent(event);
             case MotionEvent.ACTION_UP:
+                isTouching = false;
                 /*
                 处理自动展开和收回
                 这里将整个布局都收回去了,所以显示不出状态栏
                  */
-                if (panelView.getY() + panelView.getHeight() < 250//getY是指View的顶部位置
-                        && statusBarExpanded.getVisibility() == VISIBLE
-                        && statusBar.getVisibility() != INVISIBLE) {
-                    statusBarExpanded.setVisibility(GONE);
+                if (panelView.getY() + panelView.getHeight() < MINEXPENDHIGH  //getY是指View的顶部位置,小于最小展开高度的话就自动回收
+                        && enablePullDownPanelView
+                        && isStatusBarShown) {
                     statusBar.setVisibility(VISIBLE);
-                    //先滚出顶部边缘
+                    /*
+                    整个布局先滚出顶部边缘
+                    这是为了重新只显示状态栏
+                     */
                     panelView.setTranslationY(0 - panelView.getHeight());
-                    // TODO：状态栏下滑动画
+                    statusBarExpanded.setVisibility(GONE);
+                    isStatusBarExpandedShown = false;
                     panelView.setTranslationY(0);
-
                     params.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     windowManager.updateViewLayout(thisView, params);
-                    statusBar.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (statusBarExpanded.getVisibility() == GONE) {
-                                statusBar.setVisibility(INVISIBLE);
-                                isStartPanelView = false;
-                                isStatusBarExpended = false;
-                            }
-                        }
-                    }, 1500);
-                } else if (statusBarExpanded.getVisibility() == VISIBLE) {
+                    //在放手后无任何操作就隐藏状态栏
+                    statusBar.postDelayed(statusBarHideRunnable, 2500);
+                } else if (isStatusBarExpandedShown) {//自动下拉到底部
                     // TODO：获取屏幕高度
                     DisplayMetrics metrics = new DisplayMetrics();
                     windowManager.getDefaultDisplay().getMetrics(metrics);
+                    //setTranslationY设置的是这个View顶部在的位置,要注意
                     panelView.setTranslationY(metrics.heightPixels - panelView.getHeight());
                 }
         }
         return true;
     }
+
+    Runnable statusBarHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!isTouching && !isStatusBarExpandedShown) {
+                statusBar.setVisibility(INVISIBLE);
+                enablePullDownPanelView = false;
+                isStatusBarShown = false;
+            }
+        }
+    };
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         public MyGestureListener() {
@@ -190,34 +213,17 @@ public class StatusBarView extends FrameLayout {
 
         @Override
         public boolean onDown(MotionEvent e) {
-            if (statusBar.getVisibility() == VISIBLE) {//状态栏显示的时候再次点击就可以下拉
-
-//                statusBar.setVisibility(VISIBLE);
-                //处理屏幕闪动
-//                panelView.setY(e.getY() - panelView.getHeight());
-//                panelView.setTranslationY(e.getY() - panelView.getHeight());
-
-//                panelView.setVisibility(VISIBLE);
-//                params.height = WindowManager.LayoutParams.MATCH_PARENT;
-//                windowManager.updateViewLayout(thisView, params);
-
-            } else {//第一次点击（下拉）就展示状态栏,添加动画
-
-//                statusBar.setVisibility(VISIBLE);
-//                handler.post(runnable3);
-//                params.height = WindowManager.LayoutParams.MATCH_PARENT;
-//                windowManager.updateViewLayout(thisView, params);
-//                statusBar.setVisibility(VISIBLE);
-//                statusBarAnimator.setPosition(e.getY());
-//                statusBarExpanded.setVisibility(INVISIBLE);
-//                panelView.setTranslationY(0);
-            }
-//            Toast.makeText(mContext, "点击了状态栏", Toast.LENGTH_LONG).show();
-
-            if (isStatusBarExpended && !isStartPanelView) {//再收回去的时候还是wrap
-                isStartPanelView = true;
-                statusBarExpanded.setVisibility(INVISIBLE);
-                statusBarExpanded.setY(0 - statusBarExpanded.getHeight());
+            if (isStatusBarShown) {
+                //只要状态栏显示了,就可以下拉
+                enablePullDownPanelView = true;
+                //重置状态栏是否要隐藏的时间
+                statusBar.removeCallbacks(statusBarHideRunnable);
+                //防止一按下状态栏就闪烁出下拉栏
+                if (!isStatusBarExpandedShown) {
+                    statusBarExpanded.setVisibility(INVISIBLE);
+                    isStatusBarExpandedShown = true;
+                }
+                //覆盖整个屏幕,不然没有位置提供下拉
                 params.height = WindowManager.LayoutParams.MATCH_PARENT;
                 windowManager.updateViewLayout(thisView, params);
             }
@@ -243,19 +249,17 @@ public class StatusBarView extends FrameLayout {
          */
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            Log.e(TAG, "onScroll");
-//            statusBar.setTranslationY(e2.getY() - statusBarExpanded.getHeight() - statusBar.getHeight());
-//            statusBarExpanded.setTranslationY(e2.getY() - statusBarExpanded.getHeight());
-
-            if (!isStatusBarExpended) {
+            if (!isStatusBarShown) {//第一次下拉的时候只可以下拉状态栏
                 statusBar.setVisibility(VISIBLE);
+                //计算移动的百分比提供给Animator
                 float position = (e2.getY() - statusBar.getHeight()) / statusBar.getHeight();
                 statusBarAnimator.setPosition(position);
-            } else if (isStartPanelView) {
+            } else if (enablePullDownPanelView) {
                 statusBarExpanded.setVisibility(VISIBLE);
                 //下拉通知栏
                 panelView.setTranslationY(e2.getY() - panelView.getHeight());
             }
+            Log.e(TAG, "onScroll");
             return true;
         }
 
@@ -264,13 +268,9 @@ public class StatusBarView extends FrameLayout {
             Log.e(TAG, "onLongPress");
         }
 
-        /**
-         * 快速下拉 可以开启动画直达底部
-         */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             Log.e(TAG, "onFling");
-//            Toast.makeText(mContext, "下拉了状态栏", Toast.LENGTH_LONG).show();
             return true;
         }
 
@@ -290,37 +290,10 @@ public class StatusBarView extends FrameLayout {
     }
 
 
-    private int realWidth, realHeiht;
-
+    /**
+     * 以下是可以实现自动动画的简单设想
+     */
     Handler handler = new Handler();
-
-    boolean flag = false;
-
-    Runnable runnable = new
-            Runnable() {
-                @Override
-                public void run() {
-                    if (params.y < 10) {
-                        params.y += 1;
-                        windowManager.updateViewLayout(StatusBarView.this, params);
-                        handler.postDelayed(runnable, 10);
-                    }
-                    if (params.y == 10) {
-                        handler.postDelayed(runnable2, 2000);
-                    }
-                }
-            };
-
-    Runnable runnable2 = new Runnable() {
-        @Override
-        public void run() {
-            if (params.y > 0) {
-                params.y -= 1;
-                windowManager.updateViewLayout(StatusBarView.this, params);
-                handler.postDelayed(runnable2, 10);
-            }
-        }
-    };
 
     float f = 0f;
     Runnable runnable3 = new Runnable() {
