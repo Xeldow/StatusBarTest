@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/status_bar_expanded"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/rl_pull_down_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="2dp"
+        android:src="@drawable/ic_pull_arrow_down" />
+
+    <com.android.statusbartest.view.SlideItemListView
+        android:id="@+id/lv_notification"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_pull_down_arrow"
+        android:background="@color/color_transparent"
+        android:cacheColorHint="@color/color_transparent"
+        android:divider="@null"
+        android:fadingEdge="none"
+        android:listSelector="@color/color_transparent"
+        android:paddingTop="@dimen/dimen_notification_top_gap"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/tv_notification_none"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_notification_none_top_gap"
+        android:drawableTop="@drawable/ic_notification_none"
+        android:gravity="center_horizontal"
+        android:text="@string/string_notification_none"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/dimen_notification_none_text_size" />
+
+</RelativeLayout>

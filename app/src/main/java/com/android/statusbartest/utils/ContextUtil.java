@@ -1,17 +1,20 @@
-package com.android.statusbartest;
+package com.android.statusbartest.utils;
 
+import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * @description:
  * @author: Xeldow
  * @date: 2019/8/1
  */
-public final class Pause {
+public final class ContextUtil {
 
     /**
      * Context对象
@@ -26,7 +29,7 @@ public final class Pause {
      */
     public static Context getContext() {
         if (CONTEXT_INSTANCE == null) {
-            synchronized (Pause.class) {
+            synchronized (ContextUtil.class) {
                 if (CONTEXT_INSTANCE == null) {
                     try {
                         Class<?> ActivityThread = Class.forName("android.app.ActivityThread");
@@ -37,8 +40,6 @@ public final class Pause {
                         Method method2 = currentActivityThread.getClass().getMethod("getApplication");
                         CONTEXT_INSTANCE = (Context) method2.invoke(currentActivityThread);//获取 Context对象
 
-                        Method method3 = CONTEXT_INSTANCE.getClass().getMethod("onPause");
-                        method3.invoke(CONTEXT_INSTANCE);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -47,6 +48,39 @@ public final class Pause {
             }
         }
         return CONTEXT_INSTANCE;
+    }
+
+    public static Activity getActivity() {
+        Class activityThreadClass = null;
+        try {
+            activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
+            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            activitiesField.setAccessible(true);
+            Map activities = (Map) activitiesField.get(activityThread);
+            for (Object activityRecord : activities.values()) {
+                Class activityRecordClass = activityRecord.getClass();
+                Field pausedField = activityRecordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!pausedField.getBoolean(activityRecord)) {
+                    Field activityField = activityRecordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    Activity activity = (Activity) activityField.get(activityRecord);
+                    return activity;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public class Solution {

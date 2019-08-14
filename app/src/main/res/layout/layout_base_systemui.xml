@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/blur_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/panel_view"
         android:layout_width="match_parent"
@@ -12,18 +18,19 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/status_bar"
+            layout="@layout/status_bar2"
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="invisible" />
 
         <include
-            layout="@layout/status_bar_expanded"
+            layout="@layout/status_bar_expanded2"
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
+
 
     </LinearLayout>
 

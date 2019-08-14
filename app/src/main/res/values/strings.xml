@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">StatusBarTest</string>
+    <string name="string_notification_none">没有通知</string>
 </resources>

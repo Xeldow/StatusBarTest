@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Screen density = 2 320x360 -->
+
+    <!-- text size -->
+    <dimen name="dimen_text_size_20">20sp</dimen>
+    <dimen name="dimen_text_size_19">19sp</dimen>
+    <dimen name="dimen_text_size_18">18sp</dimen>
+    <dimen name="dimen_text_size_17">17sp</dimen>
+    <dimen name="dimen_text_size_16">16sp</dimen>
+    <dimen name="dimen_text_size_15">15sp</dimen>
+    <dimen name="dimen_text_size_14">14sp</dimen>
+    <dimen name="dimen_text_size_13">13sp</dimen>
+    <dimen name="dimen_text_size_12">12sp</dimen>
+
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_14dp">14dp</dimen>
+
+    <!-- app -->
+    <dimen name="dimen_app_item_width">72dp</dimen>
+    <dimen name="dimen_app_item_height">65dp</dimen>
+    <dimen name="dimen_app_item_gap">4dp</dimen>
+    <dimen name="dimen_app_item_text_left_gap">10dp</dimen>
+    <dimen name="dimen_app_item_radius">10dp</dimen>
+    <dimen name="dimen_app_item_padding">8dp</dimen>
+
+    <dimen name="dimen_app_item_header_height">20dp</dimen>
+    <dimen name="dimen_app_item_bottom_gap">16dp</dimen>
+    <dimen name="dimen_app_item_icon_size">52dp</dimen>
+    <dimen name="dimen_app_item_icon_margin_start">10dp</dimen>
+    <dimen name="dimen_app_item_text_size">13sp</dimen>
+    <dimen name="dimen_app_item_text_top_gap">2dp</dimen>
+    <dimen name="dimen_app_item_unread_left_gap">42dp</dimen>
+    <dimen name="dimen_app_item_unread_left_none">46dp</dimen>
+    <dimen name="dimen_app_item_unread_left_one_digit">42dp</dimen>
+    <dimen name="dimen_app_item_unread_left_two_digit">37dp</dimen>
+
+    <dimen name="dimen_app_unread_none_size">11dp</dimen>
+    <dimen name="dimen_app_unread_none_radius">20dp</dimen>
+    <dimen name="dimen_app_unread_one_digital_height">20dp</dimen>
+    <dimen name="dimen_app_unread_one_digital_width">20dp</dimen>
+    <dimen name="dimen_app_unread_one_digital_radius">20dp</dimen>
+    <dimen name="dimen_app_unread_two_digital_height">20dp</dimen>
+    <dimen name="dimen_app_unread_two_digital_width">25dp</dimen>
+    <dimen name="dimen_app_unread_two_digital_radius">20dp</dimen>
+
+    <dimen name="dimen_app_page_tag_width">16dp</dimen>
+    <dimen name="dimen_app_page_tag_height">14dp</dimen>
+
+    <dimen name="dimen_margin_size_24">24dp</dimen>
+
+    <!-- Clock -->
+    <!-- clock prompt -->
+    <dimen name="dimen_clock_prompt_rounded_rectangle_height">17dp</dimen>
+    <dimen name="dimen_clock_prompt_horizontal_gap">6dp</dimen>
+    <dimen name="dimen_clock_prompt_top_gap">2dp</dimen>
+    <dimen name="dimen_clock_prompt_text_size">9sp</dimen>
+
+    <dimen name="dimen_clock_prompt_status_right_gap">2dp</dimen>
+
+    <dimen name="dimen_clock_prompt_message_gap">2dp</dimen>
+
+    <dimen name="dimen_clock_prompt_weather_bottom">24dp</dimen>
+    <dimen name="dimen_clock_prompt_weather_height">32dp</dimen>
+    <dimen name="dimen_clock_prompt_weather_text_size">11sp</dimen>
+    <dimen name="dimen_clock_prompt_weather_horizontal_gap">10dp</dimen>
+
+    <!-- clock class mode -->
+
+    <!-- Clock Universe -->
+
+    <!-- Clock Class Mode -->
+    <dimen name="dimen_class_mode_clock_second_circle_view_size">20dp</dimen>
+    <dimen name="dimen_class_mode_clock_date_text_size">14sp</dimen>
+    <dimen name="dimen_class_mode_clock_top_gap">2dp</dimen>
+    <dimen name="dimen_class_mode_clock_top_left_gap">1dp</dimen>
+    <dimen name="dimen_class_mode_clock_top_right_gap">4dp</dimen>
+    <dimen name="dimen_class_mode_clock_time_top_gap">36dp</dimen>
+    <dimen name="dimen_class_mode_clock_weather_top_gap">8dp</dimen>
+    <dimen name="dimen_class_mode_clock_weather_left_gap">4dp</dimen>
+    <dimen name="dimen_class_mode_clock_weather_right_gap">7dp</dimen>
+    <dimen name="dimen_class_mode_clock_temperature_top_gap">12dp</dimen>
+    <dimen name="dimen_class_mode_clock_temperature_size">22sp</dimen>
+    <dimen name="dimen_class_mode_clock_air_top_gap">12dp</dimen>
+    <dimen name="dimen_class_mode_clock_air_text_size">22sp</dimen>
+    <dimen name="dimen_class_mode_clock_air_quality_top_gap">17dp</dimen>
+    <dimen name="dimen_class_mode_clock_air_quality_left_gap">2dp</dimen>
+    <dimen name="dimen_class_mode_clock_air_quality_right_gap">3dp</dimen>
+    <dimen name="dimen_class_mode_clock_air_quality_text_size">12sp</dimen>
+    <dimen name="dimen_class_mode_clock_bottom_magin_top">148dp</dimen>
+    <dimen name="dimen_class_mode_clock_bottom_title_text_size">26sp</dimen>
+
+    <!-- Clock Reserve Emergency Power -->
+    <dimen name="dimen_reserve_emergency_power_clock_top_gap">2dp</dimen>
+    <dimen name="dimen_reserve_emergency_power_clock_date_text_size">14sp</dimen>
+    <dimen name="dimen_reserve_emergency_power_clock_time_top_gap">36dp</dimen>
+    <dimen name="dimen_reserve_emergency_power_clock_text_top_gap">18dp</dimen>
+    <dimen name="dimen_reserve_emergency_power_clock_text_size">16sp</dimen>
+    <dimen name="dimen_reserve_emergency_power_line_spacing_extra">2dp</dimen>
+
+    <!-- pull -->
+    <dimen name="dimen_pull_back_height">14dp</dimen>
+
+    <!-- status bar -->
+    <dimen name="dimen_status_bar_height">14dp</dimen>
+    <dimen name="dimen_base_panel_height">18dp</dimen>
+    <dimen name="dimen_status_bar_gap_2">2dp</dimen>
+    <dimen name="dimen_status_bar_text_size">10sp</dimen>
+
+    <!-- pull down -->
+    <dimen name="dimen_notification_none_top_gap">13dp</dimen>
+    <dimen name="dimen_notification_none_text_size">15sp</dimen>
+    <dimen name="dimen_notification_none_text_gap">1dp</dimen>
+
+    <dimen name="dimen_notification_top_gap">6dp</dimen>
+    <dimen name="dimen_item_notification_title_height">38dp</dimen>
+    <dimen name="dimen_item_notification_corner_radius">10dp</dimen>
+    <dimen name="dimen_item_notification_delete_left_gap">10dp</dimen>
+    <dimen name="dimen_item_notification_bottom_gap">6dp</dimen>
+
+    <dimen name="dimen_item_notification_header_bottom_gap">7dp</dimen>
+
+    <!-- pull up -->
+
+    <dimen name="dimen_pull_up_gap_4">4dp</dimen>
+
+    <!-- clock notification -->
+    <dimen name="dimen_clock_notification_padding_start">5dp</dimen>
+    <dimen name="dimen_clock_notification_padding_end">5dp</dimen>
+    <dimen name="dimen_clock_notification_close_height">38dp</dimen>
+    <dimen name="dimen_clock_notification_close_bottom_gap">12dp</dimen>
+    <dimen name="dimen_pop_notification_close_radius">10dp</dimen>
+    <dimen name="dimen_clock_notification_close_text_size">15sp</dimen>
+    <dimen name="dimen_clock_notification_icon_top_gap">43dp</dimen>
+
+
+    <!-- pop notification -->
+    <dimen name="dimen_pop_notification_top_gap">3dp</dimen>
+    <dimen name="dimen_pop_notification_right_gap">4dp</dimen>
+    <dimen name="dimen_pop_notification_radius">20dp</dimen>
+    <dimen name="dimen_pop_notification_height">40dp</dimen>
+    <dimen name="dimen_pop_notification_width">125dp</dimen>
+    <dimen name="dimen_pop_notification_width_max">155dp</dimen>
+    <dimen name="dimen_pop_notification_width_min">120dp</dimen>
+    <dimen name="dimen_pop_notification_text_left_gap">10dp</dimen>
+    <dimen name="dimen_pop_notification_text_size">15sp</dimen>
+    <dimen name="dimen_pop_notification_icon_size">33dp</dimen>
+    <dimen name="dimen_pop_notification_icon_left_gap">7dp</dimen>
+    <dimen name="dimen_pop_notification_icon_top_gap">3dp</dimen>
+
+    <!-- screen password -->
+    <dimen name="dimen_screen_password_gap_30">30dp</dimen>
+    <dimen name="dimen_screen_password_gap_8">8dp</dimen>
+    <dimen name="dimen_screen_password_gap_2">2dp</dimen>
+
+    <dimen name="dimen_screen_password_key_width">52dp</dimen>
+    <dimen name="dimen_screen_password_key_height">25dp</dimen>
+
+    <!-- push -->
+    <dimen name="dimen_push_icon_size">20dp</dimen>
+
+    <dimen name="dimen_push_gap_12">12dp</dimen>
+    <dimen name="dimen_push_gap_8">8dp</dimen>
+    <dimen name="dimen_push_gap_7">7dp</dimen>
+    <dimen name="dimen_push_gap_6">6dp</dimen>
+    <dimen name="dimen_push_gap_5">5dp</dimen>
+    <dimen name="dimen_push_gap_4">4dp</dimen>
+    <dimen name="dimen_push_gap_3">3dp</dimen>
+
+    <!-- child -->
+    <dimen name="dimen_child_item_height">55dp</dimen>
+
+    <dimen name="dimen_child_item_avatar_size">44dp</dimen>
+    <dimen name="dimen_child_item_name_left_gap">10dp</dimen>
+
+    <dimen name="dimen_child_app_motion_progress_line_width">10dp</dimen>
+
+    <dimen name="dimen_margin_size_4">4dp</dimen>
+    <dimen name="dimen_margin_size_9">9dp</dimen>
+    <dimen name="dimen_margin_size_10">10dp</dimen>
+    <dimen name="dimen_margin_size_18">18dp</dimen>
+    <dimen name="dimen_margin_size_20">20dp</dimen>
+
+    <!-- Prompt -->
+    <dimen name="dimen_prompt_text_size">15sp</dimen>
+    <dimen name="dimen_prompt_long_text_size">15sp</dimen>
+    <dimen name="dimen_prompt_text_z3_size">13sp</dimen>
+    <dimen name="dimen_prompt_jump_over_text_gap">6dp</dimen>
+    <dimen name="dimen_prompt_jump_over_size">44dp</dimen>
+
+    <dimen name="dimen_no_sim_card_text_gap">-2dp</dimen>
+    <dimen name="dimen_no_sim_card_medium_gap">0dp</dimen>
+
+    <dimen name="dimen_no_bind_watch_top_gap">35dp</dimen>
+    <dimen name="dimen_no_bind_z3_watch_top_gap">30dp</dimen>
+    <dimen name="dimen_no_bind_watch_qr_radius">6dp</dimen>
+    <dimen name="dimen_no_bind_watch_qr_gap">3dp</dimen>
+    <dimen name="dimen_no_bind_watch_medium_gap">5dp</dimen>
+    <dimen name="dimen_no_bind_watch_text_gap">1dp</dimen>
+
+    <dimen name="dimen_bind_success_top_gap">22dp</dimen>
+    <dimen name="dimen_bind_success_medium_gap">10dp</dimen>
+    <dimen name="dimen_bind_success_bottom_gap">10dp</dimen>
+    <dimen name="dimen_bind_success_vertical_gap">5dp</dimen>
+    <dimen name="dimen_bind_success_button_height">38dp</dimen>
+    <dimen name="dimen_bind_success_button_corner">9dp</dimen>
+
+    <!-- guide page -->
+    <dimen name="dimen_guide_page_big_text_size">19sp</dimen>
+    <dimen name="dimen_guide_page_welcome_text_size">40sp</dimen>
+    <dimen name="dimen_guide_page_small_text_size">16sp</dimen>
+    <dimen name="dimen_guide_page_i_know_height">38dp</dimen>
+    <dimen name="dimen_guide_page_i_know_gap">5dp</dimen>
+    <dimen name="dimen_guide_page_i_know_radius">19dp</dimen>
+    <dimen name="dimen_guide_page_i_know_bottom_gap">10dp</dimen>
+
+    <dimen name="dimen_guide_page_pull_down_bottom_gap">55dp</dimen>
+    <dimen name="dimen_guide_page_pull_down_arrow_top_gap">7dp</dimen>
+
+    <dimen name="dimen_guide_page_slide_right_top_gap">30dp</dimen>
+    <dimen name="dimen_guide_page_slide_right_arrow_left_gap">28dp</dimen>
+
+    <dimen name="dimen_guide_page_welcome_height">100dp</dimen>
+    <dimen name="dimen_guide_page_welcome_margin_top">4dp</dimen>
+    <dimen name="dimen_guide_page_slide_margin_top">19dp</dimen>
+    <dimen name="dimen_guide_page_discovery_margin_top">2dp</dimen>
+
+
+    <!-- permission -->
+    <dimen name="dimen_permission_anim_text_size">40sp</dimen>
+    <dimen name="dimen_permission_title_text_size">20sp</dimen>
+    <dimen name="dimen_permission_button_height">36dp</dimen>
+    <dimen name="dimen_permission_button_text_size">15sp</dimen>
+    <dimen name="dimen_permission_content_text_size">14sp</dimen>
+    <dimen name="dimen_permission_content_line_space">4sp</dimen>
+
+    <dimen name="dimen_permission_gap_7">7dp</dimen>
+    <dimen name="dimen_permission_gap_5">5dp</dimen>
+    <dimen name="dimen_permission_gap_1">1dp</dimen>
+
+    <dimen name="dimen_permission_corner">36dp</dimen>
+    <dimen name="dimen_permission_circle_size">5dp</dimen>
+
+    <!-- launcher permission -->
+
+    <!-- sim card lock -->
+    <dimen name="dimen_sim_card_lock_button_width">110dp</dimen>
+    <dimen name="dimen_sim_card_lock_button_height">36dp</dimen>
+    <dimen name="dimen_sim_card_lock_button_corner">18dp</dimen>
+    <dimen name="dimen_sim_card_lock_button_line">1dp</dimen>
+    <dimen name="dimen_sim_card_lock_text_size">15sp</dimen>
+    <dimen name="dimen_sim_card_lock_button_text_size">13sp</dimen>
+    <dimen name="dimen_sim_card_lock_gap_71">71dp</dimen>
+    <dimen name="dimen_sim_card_lock_gap_10">10dp</dimen>
+
+    <!-- preview -->
+    <dimen name="dimen_item_preview_width">110dp</dimen>
+    <dimen name="dimen_item_preview_horizontal_gap">5dp</dimen>
+    <dimen name="dimen_item_preview_horizontal_remainder">25dp</dimen>
+
+    <dimen name="dimen_item_preview_top_gap_6">6dp</dimen>
+    <dimen name="dimen_item_preview_top_gap_6.5">6.5dp</dimen>
+    <dimen name="dimen_item_preview_top_gap_7.5">7.5dp</dimen>
+    <dimen name="dimen_item_preview_top_gap_9.5">9.5dp</dimen>
+
+    <dimen name="dimen_item_preview_text_size">12sp</dimen>
+    <dimen name="dimen_item_preview_title_text_size">14sp</dimen>
+
+    <!-- Alipay -->
+    <dimen name="dimen_alipay_input_text_size">24sp</dimen>
+    <dimen name="dimen_alipay_tip_next_gap">17dp</dimen>
+    <dimen name="dimen_alipay_tip_retry_gap">7dp</dimen>
+
+    <!-- unlock -->
+    <dimen name="dimen_unlock_thumb_radius">16dp</dimen>
+    <dimen name="dimen_unlock_thumb_offset_y">17dp</dimen>
+    <dimen name="dimen_unlock_outer_radius">127dp</dimen>
+    <dimen name="dimen_unlock_medium_radius">111dp</dimen>
+    <dimen name="dimen_unlock_inner_radius">95dp</dimen>
+    <dimen name="dimen_unlock_center_y">-64dp</dimen>
+    <dimen name="dimen_unlock_line_width">31.5dp</dimen>
+    <dimen name="dimen_unlock_thumb_offset_x">9dp</dimen>
+
+    <!--与系统电话定义统一-->
+    <dimen name="text_size_21">21sp</dimen>
+    <dimen name="text_size_23">23sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="margin_size_5dp">5dp</dimen>
+    <dimen name="number_size">15sp</dimen>
+
+    <!--桌面头布局高度-->
+    <dimen name="head_view_height">20sp</dimen>
+    <!-- 挂失 -->
+    <dimen name="margin_contact">1dp</dimen>
+
+    <!--I18 1.0.5 主题-->
+    <dimen name="theme_cool_icon_size">39dp</dimen>
+
+    <!--快速呼叫-->
+    <dimen name="quick_dial_title_text_size">17sp</dimen>
+    <dimen name="quick_dial_extra_margin_top">5dp</dimen>
+    <dimen name="quick_dial_extra_inner_margin">0dp</dimen>
+    <dimen name="quick_dial_extra_text_size">16sp</dimen>
+    <dimen name="quick_dial_iv_size">68dp</dimen>
+    <dimen name="quick_dial_iv_margin_top">16dp</dimen>
+    <dimen name="item_quick_dial_text_startMargin">5dp</dimen>
+    <dimen name="item_quick_dial_text_topMargin_big">8dp</dimen>
+    <dimen name="item_quick_dial_text_topMargin_small">2dp</dimen>
+    <dimen name="item_quick_dial_name_size">16sp</dimen>
+    <dimen name="item_quick_dial_admin_size">14sp</dimen>
+    <dimen name="item_quick_dial_btn_margin_bottom">10dp</dimen>
+
+    <dimen name="rv_default_length">50dp</dimen>
+
+    <dimen name="contatct_list_name">17sp</dimen>
+    <dimen name="contanct_app_add_hint">15sp</dimen>
+
+    <!-- 标题字号 -->
+    <dimen name="page_title_text_size">21sp</dimen>
+    <!-- 列表主字号 -->
+    <dimen name="list_title_text_size">17sp</dimen>
+    <!-- 列表说明文字字号 -->
+    <dimen name="list_content_text_size">13sp</dimen>
+    <!-- 说明文字字号 -->
+    <dimen name="content_text_size">14sp</dimen>
+    <!-- 空白性说明文本字号 -->
+    <dimen name="blank_content_text_size">15sp</dimen>
+
+    <!-- Camera -->
+    <dimen name="content_magin">75sp</dimen>
+
+    <!-- 高温 -->
+    <dimen name="dimen_high_temp_margin">124dp</dimen>
+    <dimen name="dimen_high_temp_gap">2dp</dimen>
+    <dimen name="rest_time_text_size">16sp</dimen>
+    <dimen name="wait_for_moment_text_size">16sp</dimen>
+    <dimen name="relax_top_text_size">14sp</dimen>
+    <dimen name="relax_bottom_text_size">16sp</dimen>
+
+    <!-- 快速拨号 -->
+    <dimen name="margin_90dp">90dp</dimen>
+    <dimen name="margin_134dp">134dp</dimen>
+
+    <dimen name="tv_week_left_margin">9dp</dimen>
+    <dimen name="iv_date_top_margin">0dp</dimen>
+    <dimen name="iv_date_bottom_margin">0dp</dimen>
+    <dimen name="tv_call_confirm_title1_margin_top">7dp</dimen>
+    <dimen name="tv_call_confirm_title2_margin_top">1dp</dimen>
+
+    <dimen name="tv_charge_ota">29px</dimen>
+
+    <!--低温充电提醒-->
+    <dimen name="low_temperature_charge_btn_height">36dp</dimen>
+    <dimen name="low_temperature_charge_btn_width">110dp</dimen>
+    <dimen name="low_temperature_charge_text_lineSpacing">0.5dp</dimen>
+    <dimen name="dimen_no_bind_z1watch_qr_radius">8dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+
+
+    <!--追补-->
+    <dimen name="dimen_bind_success_button_weith">147dp</dimen>
+    <dimen name="dimen_reserve_emergency_power_clock_text_top_gapz1">13dp</dimen>
+    <dimen name="dimen_reserve_emergency_power_clock_text_sizez1">17sp</dimen>
+    <dimen name="dimen_clock_my_title_top_margin">-10dp</dimen>
+    <dimen name="dimen_prompt_jump_over_z1size">47dp</dimen>
+    <dimen name="dimen_prompt_jump_height_z1size">29dp</dimen>
+    <dimen name="dimen_prompt_jump_over_z1text_gap">5dp</dimen>
+    <dimen name="dimen_prompt_z1text_size">16sp</dimen>
+    <dimen name="dimen_no_bind_z1watch_qr_gap">2dp</dimen>
+    <dimen name="dimen_no_bind_z1watch_medium_gap">3dp</dimen>
+    <dimen name="dimen_prompt_text_z1_size">14sp</dimen>
+
+    <!--CallIndicatorView for i18n, defalut 1 -->
+    <dimen name="indication_dial_text_width">70dp</dimen>
+    <dimen name="indication_incoming_text_width">70dp</dimen>
+    <integer name="indication_dial_text_lines">1</integer>
+    <integer name="indication_incoming_text_lines">1</integer>
+    <dimen name="indication_dial_margin_top">5dp</dimen>
+    <dimen name="indication_incoming_margin_top">5dp</dimen>
+</resources>

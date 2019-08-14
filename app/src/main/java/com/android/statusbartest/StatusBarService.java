@@ -8,15 +8,15 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.IBinder;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
+
+import com.android.statusbartest.view.PanelView;
 
 public class StatusBarService extends Service {
     private static WindowManager windowManager;
     private static WindowManager.LayoutParams params;
 
-    private StatusBarView view;
+    private PanelView view;
 
     @Override
     public void onDestroy() {
@@ -38,13 +38,13 @@ public class StatusBarService extends Service {
         params.gravity = Gravity.TOP;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
 //        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//        params.height = 40;
+//        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = getResources().getDimensionPixelSize(R.dimen.dimen_base_panel_height);
         params.format = PixelFormat.RGBA_8888;
         params.type = WindowManager.LayoutParams.TYPE_PHONE;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        view = new StatusBarView(getApplicationContext(), windowManager, params);
+        view = new PanelView(getApplicationContext(), windowManager, params);
         windowManager.addView(StatusBarService.this.view, params);
 
         return super.onStartCommand(intent, flags, startId);

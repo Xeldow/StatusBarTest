@@ -1,8 +1,7 @@
-package com.android.statusbartest.animator;
+package com.android.statusbartest.utils;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.util.FloatProperty;
 import android.util.Log;

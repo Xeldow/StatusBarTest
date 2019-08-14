@@ -1,27 +1,21 @@
 package com.android.statusbartest;
 
-import android.app.Activity;
-import android.app.ActivityManagerNative;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import com.android.statusbartest.view.PanelView;
 
 /**
  * inflate 方法
@@ -31,8 +25,8 @@ import java.util.Map;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private StatusBarView statusBarView;
-    private StatusBarView statusBarView1;
+    private PanelView statusBarView;
+    private PanelView statusBarView1;
     private LinearLayout root;
 
     @Override

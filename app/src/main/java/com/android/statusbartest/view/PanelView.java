@@ -1,7 +1,12 @@
-package com.android.statusbartest;
+package com.android.statusbartest.view;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
@@ -12,18 +17,32 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.android.statusbartest.animator.TouchAnimator;
+import com.android.statusbartest.R;
+import com.android.statusbartest.utils.TouchAnimator;
+import com.android.statusbartest.utils.BlurUtil;
+import com.android.statusbartest.utils.ScreenShotUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 /**
  * 所有SystemUI的BaseView
  * <p/>
  * Created by XiaoZhenLin on 2019/7/25.
  */
-public class StatusBarView extends FrameLayout {
+public class PanelView extends FrameLayout {
     private static final String TAG = "StatusBarView";
-    private static final int MINEXPENDHIGH = 250;
+    private static final int MIN_EXPEND_HIGH = 250;
 
     private Context mContext;
 
@@ -31,24 +50,34 @@ public class StatusBarView extends FrameLayout {
 
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
-    private StatusBarView thisView;
+    private PanelView thisView;
 
     /**
      * 状态栏
      */
-    private LinearLayout statusBar;
-    private boolean isStatusBarShown;
+    private RelativeLayout statusBar;
+    private float statusBarHeight;
     /**
      * 展开部分
      */
-    private LinearLayout statusBarExpanded;
+    private RelativeLayout statusBarExpanded;
     /**
      * 整个下拉栏
      */
     private LinearLayout panelView;
+    private DisplayMetrics metrics;
     /**
-     * flag
+     * 高斯模糊相关
      */
+    private ImageView blurView;
+    private Bitmap finalBitmap;
+    private Rect blurArea;
+    private Bitmap overlay;
+    private Canvas canvas;
+    /**
+     * 状态判断
+     */
+    private boolean isStatusBarShown;
     private boolean enablePullDownPanelView = false;
     private boolean isTouching = false;
     private boolean isStatusBarExpandedShown = false;
@@ -60,7 +89,7 @@ public class StatusBarView extends FrameLayout {
     private TouchAnimator.Listener sbAnimatorListener;
 
 
-    public StatusBarView(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
+    public PanelView(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
 
         // TODO：设置背景方法
@@ -68,14 +97,14 @@ public class StatusBarView extends FrameLayout {
         mContext = context;
         this.windowManager = windowManager;
         this.params = params;
-        thisView = StatusBarView.this;
+        thisView = PanelView.this;
 
         initView();
         initListener();
 
         // TODO：设置margin方法
 //        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(statusBarExpanded.getLayoutParams());
-//        layoutParams.setMargins(0, statusBar.getHeight(), 0, 0);
+//        layoutParams.setMargins(0, statusBarHeight, 0, 0);
     }
 
     /**
@@ -84,8 +113,8 @@ public class StatusBarView extends FrameLayout {
      */
     private void initAnimator() {
         TouchAnimator.Builder statusBarBuilder = new TouchAnimator.Builder();
-        statusBarBuilder.addFloat(statusBar, "translationY", -statusBar.getHeight(), 0);
-//        statusBarBuilder.addFloat(statusBar, "alpha", 0.5, 1);
+        statusBarBuilder.addFloat(statusBar, "translationY", -statusBarHeight, 0);
+        statusBarBuilder.addFloat(statusBar, "alpha", (float) 0.3, (float) 0.7);
         statusBarAnimator = statusBarBuilder
                 .setListener(sbAnimatorListener)
                 .build();
@@ -116,12 +145,19 @@ public class StatusBarView extends FrameLayout {
     private void initView() {
         inflate(mContext, R.layout.layout_base_systemui, this);
 
-        statusBar = (LinearLayout) findViewById(R.id.status_bar_parent);
-        statusBarExpanded = (LinearLayout) findViewById(R.id.status_bar_expanded);
+        metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        statusBar = (RelativeLayout) findViewById(R.id.status_bar_parent);
+        statusBarHeight = getResources().getDimensionPixelSize(R.dimen.dimen_status_bar_height);
+        Log.e("mLog ", "height" + statusBarHeight);
+        statusBarExpanded = (RelativeLayout) findViewById(R.id.status_bar_expanded);
         panelView = (LinearLayout) findViewById(R.id.panel_view);
+        //帧布局中视图显示是按照栈的方式这样就可以把高斯模糊置底了
+        blurView = (ImageView) findViewById(R.id.blur_background);
     }
 
 
+    @SuppressLint("NewApi")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -131,10 +167,15 @@ public class StatusBarView extends FrameLayout {
              */
             case MotionEvent.ACTION_DOWN:
                 isTouching = true;
+                if (canvas != null && !isStatusBarExpandedShown) {
+//                    changeBitmap(ScreenShotUtil.getBitmap());
+                }
                 //初始化Animator
+                // TODO：使用getResource就可以把这个初始化提前了
                 if (statusBarAnimator == null) {
-                    statusBar.setY(0 - statusBar.getHeight());
+                    statusBar.setY(0 - statusBarHeight);
                     initAnimator();
+                    Log.e("mLog ", "h2" + statusBar.getHeight());
                 }
             case MotionEvent.ACTION_MOVE:
                 return mGestureDetector.onTouchEvent(event);
@@ -142,9 +183,8 @@ public class StatusBarView extends FrameLayout {
                 isTouching = false;
                 /*
                 处理自动展开和收回
-                这里将整个布局都收回去了,所以显示不出状态栏
                  */
-                if (panelView.getY() + panelView.getHeight() < MINEXPENDHIGH  //getY是指View的顶部位置,小于最小展开高度的话就自动回收
+                if (panelView.getY() + panelView.getHeight() < MIN_EXPEND_HIGH  //getY是指View的顶部位置,小于最小展开高度的话就自动回收
                         && enablePullDownPanelView
                         && isStatusBarShown) {
                     statusBar.setVisibility(VISIBLE);
@@ -155,18 +195,19 @@ public class StatusBarView extends FrameLayout {
                     panelView.setTranslationY(0 - panelView.getHeight());
                     statusBarExpanded.setVisibility(GONE);
                     isStatusBarExpandedShown = false;
+                    blurView.setVisibility(GONE);
                     panelView.setTranslationY(0);
                     params.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     windowManager.updateViewLayout(thisView, params);
-                    //在放手后无任何操作就隐藏状态栏
-                    statusBar.postDelayed(statusBarHideRunnable, 2500);
                 } else if (isStatusBarExpandedShown) {//自动下拉到底部
                     // TODO：获取屏幕高度
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    windowManager.getDefaultDisplay().getMetrics(metrics);
                     //setTranslationY设置的是这个View顶部在的位置,要注意
                     panelView.setTranslationY(metrics.heightPixels - panelView.getHeight());
+                    blurArea.set(0, 0, metrics.widthPixels, metrics.heightPixels);
+                    blurView.setClipBounds(blurArea);
                 }
+                //在放手后无任何操作就隐藏状态栏
+                statusBar.postDelayed(statusBarHideRunnable, 1000);
         }
         return true;
     }
@@ -182,6 +223,9 @@ public class StatusBarView extends FrameLayout {
         }
     };
 
+    /**
+     * 手势处理
+     */
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         public MyGestureListener() {
             super();
@@ -211,6 +255,7 @@ public class StatusBarView extends FrameLayout {
             return true;
         }
 
+        @SuppressLint("NewApi")
         @Override
         public boolean onDown(MotionEvent e) {
             if (isStatusBarShown) {
@@ -236,28 +281,37 @@ public class StatusBarView extends FrameLayout {
             Log.e(TAG, "onShowPress");
         }
 
+
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.e(TAG, "onSingleTapUp");
             return true;
         }
 
+
         /**
          * @param e1        之前的DOWN
          * @param e2        现在的MOVE
          * @param distanceX 当前MOVE和上一个MOVE的位移量
          */
+        @SuppressLint("NewApi")
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             if (!isStatusBarShown) {//第一次下拉的时候只可以下拉状态栏
                 statusBar.setVisibility(VISIBLE);
                 //计算移动的百分比提供给Animator
-                float position = (e2.getY() - statusBar.getHeight()) / statusBar.getHeight();
+                float position = (e2.getY() - statusBarHeight) / statusBarHeight;
                 statusBarAnimator.setPosition(position);
+                //
+                applyBlur();
             } else if (enablePullDownPanelView) {
+
                 statusBarExpanded.setVisibility(VISIBLE);
+                blurView.setVisibility(VISIBLE);
                 //下拉通知栏
                 panelView.setTranslationY(e2.getY() - panelView.getHeight());
+                blurArea.set(0, 0, metrics.widthPixels, (int) e2.getY());
+                blurView.setClipBounds(blurArea);
             }
             Log.e(TAG, "onScroll");
             return true;
@@ -276,17 +330,54 @@ public class StatusBarView extends FrameLayout {
 
     }
 
-    public StatusBarView(Context context, AttributeSet attrs) {
+    public PanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public StatusBarView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PanelView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public StatusBarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PanelView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    /**
+     * 高斯模糊
+     */
+
+    @SuppressLint("NewApi")
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void applyBlur() {
+        overlay = Bitmap.createBitmap(metrics.widthPixels,
+                metrics.heightPixels, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(overlay);
+        blurArea = new Rect(0, 0, metrics.widthPixels, 10);
+
+
+        canvas.drawBitmap(ScreenShotUtil.getBitmap(), 0, 0, null);
+        finalBitmap = BlurUtil.with(mContext)
+                .bitmap(overlay) //要模糊的图片
+                .radius(7)//模糊半径
+                .blur();
+
+        blurView.setBackground(new BitmapDrawable(getResources(), finalBitmap));
+    }
+
+    @SuppressLint("NewApi")
+    private void changeBitmap(Bitmap bitmap) {
+
+
+        canvas.drawBitmap(bitmap, 0, 0, null);
+
+        finalBitmap = BlurUtil.with(mContext)
+                .bitmap(overlay) //要模糊的图片
+                .radius(7)//模糊半径
+                .blur();
+        blurView.setVisibility(INVISIBLE);
+        blurView.setBackground(new BitmapDrawable(getResources(), finalBitmap));
+
     }
 
 
